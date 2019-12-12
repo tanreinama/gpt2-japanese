@@ -20,7 +20,7 @@ Japanease GPT2 Generation Model
 
 ```
 $ cat trained-model-ja-117M/model-1005100.data-00000-of-00001.00 trained-model-ja-117M/model-1005100.data-00000-of-00001.01 trained-model-ja-117M/model-1005100.data-00000-of-00001.02 trained-model-ja-117M/model-1005100.data-00000-of-00001.03 trained-model-ja-117M/model-1005100.data-00000-of-00001.04 > trained-model-ja-117M/model-1005100.data-00000-of-00001
-$ python3 gpt2-generate.py -n1
+$ python3 gpt2-generate.py --num_generate 1
 ```
 
 ### サンプル
