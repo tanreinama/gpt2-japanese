@@ -100,3 +100,6 @@ $ python3 gpt2-generate.py --context="江戸時代のインターネット回線
 ```
 
 - 関連のなさそうなワードをcontextに入れると、概念が混ざったような文章になる
+
+#### 使い方はこちらも参考に
+https://www.kaggle.com/tanreinama/japanese-text-generator-with-gpt2
