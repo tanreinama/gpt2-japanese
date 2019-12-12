@@ -1,5 +1,5 @@
-# gpt2-japanease
-Japanease GPT2 Generation Model
+# gpt2-japanese
+Japanese GPT2 Generation Model
 
 # GPT2日本語モデル
 
