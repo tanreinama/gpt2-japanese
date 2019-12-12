@@ -1,0 +1,4 @@
+tqdm
+numpy
+mecab-python3
+tensorflow-gpu==1.15
