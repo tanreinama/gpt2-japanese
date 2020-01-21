@@ -5,7 +5,7 @@ import tensorflow as tf
 import requests
 import argparse
 from tqdm import tqdm
-import MeCab
+import sentencepiece as spm
 from encoder import Encoder
 from model import default_hparams
 from sampling import sample_sequence
@@ -15,7 +15,8 @@ parser.add_argument('--context', type=str, default='<|endoftext|>')
 parser.add_argument('--num_generate', type=int, default=5)
 args = parser.parse_args()
 
-mecab = MeCab.Tagger("-Owakati")
+sp = spm.SentencePieceProcessor()
+sp.Load("stm-model/stm.model")
 
 for filename in ['encoder.json', 'vocab.bpe', 'hparams.json']:
     if not os.path.isfile(filename):
@@ -66,13 +67,13 @@ with tf.Session(graph=tf.Graph()) as sess:
     )
 
     saver = tf.train.Saver()
-    ckpt = tf.train.latest_checkpoint('trained-model-ja-117M/')
+    ckpt = tf.train.latest_checkpoint('ja-117M/')
     saver.restore(sess, ckpt)
 
     generated = 0
     while True:
-        raw_text = mecab.parse(args.context) if args.context!= '<|endoftext|>' else '<|endoftext|>'
-
+        raw_text = sp.EncodeAsPieces(args.context) if args.context!= '<|endoftext|>' else '<|endoftext|>'
+        raw_text = ' '.join([r for r in raw_text if r!='▁'])
         text = ''
         while True:
             context_tokens = enc.encode(raw_text)
