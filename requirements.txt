@@ -1,4 +1,4 @@
 tqdm
 numpy
-mecab-python3
+sentencepiece
 tensorflow-gpu==1.15
