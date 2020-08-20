@@ -170,6 +170,7 @@ def model(hparams, X, past=None, scope='model', reuse=tf.AUTO_REUSE):
 
         # Language model loss.  Do tokens <n predict token n?
         h_flat = tf.reshape(h, [batch*sequence, hparams.n_embd])
+        results['h_flat'] = h_flat
         logits = tf.matmul(h_flat, wte, transpose_b=True)
         logits = tf.reshape(logits, [batch, sequence, hparams.n_vocab])
         results['logits'] = logits

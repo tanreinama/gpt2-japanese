@@ -11,17 +11,27 @@ from model import default_hparams
 from sampling import sample_sequence
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--model', type=str, default='ja-117M')
 parser.add_argument('--context', type=str, default='<|endoftext|>')
 parser.add_argument('--num_generate', type=int, default=5)
+parser.add_argument('--top_k', type=int, default=40)
+parser.add_argument('--top_p', type=float, default=0)
+parser.add_argument('--temperature', type=float, default=1)
 args = parser.parse_args()
 
 sp = spm.SentencePieceProcessor()
-sp.Load("stm-model/stm.model")
+sp.Load(args.model+"/stm.model")
+
+model_params = '117M'
+if '-' in args.model:
+    model_params = args.model.split('-')[1]
+    if '_' in model_params:
+        model_params = model_params.split('_')[0]
 
 for filename in ['encoder.json', 'vocab.bpe', 'hparams.json']:
-    if not os.path.isfile(filename):
-        r = requests.get("https://storage.googleapis.com/gpt-2/models/117M/" + filename, stream=True)
-        with open(filename, 'wb') as f:
+    if not os.path.isfile(args.model+'/'+filename):
+        r = requests.get("https://storage.googleapis.com/gpt-2/models/" + model_params + "/" + filename, stream=True)
+        with open(args.model+'/'+filename, 'wb') as f:
             file_size = int(r.headers["content-length"])
             chunk_size = 1000
             with tqdm(ncols=100, desc="Fetching " + filename, total=file_size, unit_scale=True) as pbar:
@@ -31,9 +41,9 @@ for filename in ['encoder.json', 'vocab.bpe', 'hparams.json']:
                     pbar.update(chunk_size)
 
 def get_encoder():
-    with open('encoder.json', 'r') as f:
+    with open(args.model+'/'+'encoder.json', 'r') as f:
         encoder = json.load(f)
-    with open('vocab.bpe', 'r', encoding="utf-8") as f:
+    with open(args.model+'/'+'vocab.bpe', 'r', encoding="utf-8") as f:
         bpe_data = f.read()
     bpe_merges = [tuple(merge_str.split()) for merge_str in bpe_data.split('\n')[1:-1]]
     return Encoder(
@@ -43,13 +53,13 @@ def get_encoder():
 
 batch_size=1
 length=None
-temperature=1
-top_k=0
-top_p=0.0
+temperature=args.temperature
+top_k=args.top_k
+top_p=args.top_p
 
 enc = get_encoder()
 hparams = default_hparams()
-with open('hparams.json') as f:
+with open(args.model+'/'+'hparams.json') as f:
     hparams.override_from_dict(json.load(f))
 
 if length is None:
@@ -67,10 +77,11 @@ with tf.Session(graph=tf.Graph()) as sess:
     )
 
     saver = tf.train.Saver()
-    ckpt = tf.train.latest_checkpoint('ja-117M/')
+    ckpt = tf.train.latest_checkpoint(args.model)
     saver.restore(sess, ckpt)
 
     generated = 0
+    printed = 0
     while True:
         raw_text = sp.EncodeAsPieces(args.context) if args.context!= '<|endoftext|>' else '<|endoftext|>'
         raw_text = ' '.join([r for r in raw_text if r!='▁'])
@@ -88,9 +99,11 @@ with tf.Session(graph=tf.Graph()) as sess:
                 break
             else:
                 raw_text = splitted[0][-256:]
-            print(splitted[0])
+            print(splitted[0].replace(' ',''))
+            printed += 1
 
-        generated += 1
-        if args.num_generate <= generated:
-            break
-        print("="*15)
+        if printed > 0:
+            generated += 1
+            if args.num_generate <= generated:
+                break
+            print("="*15)
