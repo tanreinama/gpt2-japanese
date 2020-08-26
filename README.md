@@ -11,6 +11,7 @@ Japanese GPT2 Generation Model
 - 生成文章からスペースを除去しました
 - top_kのデフォルト値を40にしました
 - top_k,top_p,temperatureを引数から設定出来るようにしました
+- [クラウドファウンディングでより大きなモデルのトレーニングのためのサーバー代の支援を求めています](https://camp-fire.jp/mypage/projects/320938/)
 
 ## GPT2に日本語コーパスを学習させたものです
 
