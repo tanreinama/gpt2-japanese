@@ -39,7 +39,7 @@ def get_pairs(word):
         prev_char = char
     return pairs
 
-class Encoder:
+class Encoder_with_BPE:
     def __init__(self, encoder, bpe_merges, errors='replace'):
         self.encoder = encoder
         self.decoder = {v:k for k,v in self.encoder.items()}
@@ -105,3 +105,55 @@ class Encoder:
         text = bytearray([self.byte_decoder[c] for c in text]).decode('utf-8', errors=self.errors)
         return text
 
+class Encoder:
+    def __init__(self, encoder, errors='replace'):
+        self.encoder = encoder
+        self.decoder = {v:k for k,v in self.encoder.items()}
+        self.errors = errors # how to handle errors in decoding
+
+    def encode(self, text):
+        text = text.replace('\n',' \n')
+        while '  ' in text:
+            text = text.replace('  ',' ')
+        tokens = []
+        for token in text.split(' '):
+            if token in self.encoder:
+                tokens.append(self.encoder[token])
+            else:
+                for i in token.encode('utf-8'):
+                    tokens.append(self.encoder['<|byte%d|>'%i])
+        return tokens
+
+    def decode(self, tokens):
+        words = []
+        byte_tokens = []
+        for token in tokens:
+            word = ''
+            if token in self.decoder:
+                word = self.decoder[token]
+            if word[:6] == '<|byte' and word[-2:] == '|>':
+                byte_tokens.append(int(word[6:-2]))
+            else:
+                if len(byte_tokens) > 0:
+                    words.append(bytearray(byte_tokens).decode('utf-8', errors=self.errors))
+                    byte_tokens = []
+                words.append(word)
+        if len(byte_tokens) > 0:
+            words.append(bytearray(byte_tokens).decode('utf-8', errors=self.errors))
+        text = ' '.join(words)
+        return text
+
+
+def get_encoder(model_name):
+    with open(model_name+'/'+'encoder.json', 'r') as f:
+        encoder = json.load(f)
+    if os.path.isfile(model_name+'/'+'vocab.bpe'):
+        with open(model_name+'/'+'vocab.bpe', 'r', encoding="utf-8") as f:
+            bpe_data = f.read()
+        bpe_merges = [tuple(merge_str.split()) for merge_str in bpe_data.split('\n')[1:-1]]
+        return Encoder_with_BPE(
+            encoder=encoder,
+            bpe_merges=bpe_merges,
+        )
+    else:
+        return Encoder(encoder=encoder)
