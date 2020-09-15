@@ -6,12 +6,12 @@ import requests
 import argparse
 from tqdm import tqdm
 import sentencepiece as spm
-from encoder import Encoder
+from encoder import get_encoder
 import model
 from model import default_hparams
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model', type=str, default='ja-117M')
+parser.add_argument('--model', type=str, default='ja-117M_v2')
 parser.add_argument('--context', type=str, required=True)
 args = parser.parse_args()
 
@@ -24,8 +24,8 @@ if '-' in args.model:
     if '_' in model_params:
         model_params = model_params.split('_')[0]
 
-for filename in ['encoder.json', 'vocab.bpe', 'hparams.json']:
-    if not os.path.isfile(args.model+'/'+filename):
+if not os.path.isfile(args.model+'/encoder.json'):
+    for filename in ['encoder.json', 'vocab.bpe', 'hparams.json']:
         r = requests.get("https://storage.googleapis.com/gpt-2/models/" + model_params + "/" + filename, stream=True)
         with open(args.model+'/'+filename, 'wb') as f:
             file_size = int(r.headers["content-length"])
@@ -36,20 +36,9 @@ for filename in ['encoder.json', 'vocab.bpe', 'hparams.json']:
                     f.write(chunk)
                     pbar.update(chunk_size)
 
-def get_encoder():
-    with open(args.model+'/'+'encoder.json', 'r') as f:
-        encoder = json.load(f)
-    with open(args.model+'/'+'vocab.bpe', 'r', encoding="utf-8") as f:
-        bpe_data = f.read()
-    bpe_merges = [tuple(merge_str.split()) for merge_str in bpe_data.split('\n')[1:-1]]
-    return Encoder(
-        encoder=encoder,
-        bpe_merges=bpe_merges,
-    )
-
 batch_size=1
 
-enc = get_encoder()
+enc = get_encoder(args.model)
 hparams = default_hparams()
 with open(args.model+'/'+'hparams.json') as f:
     hparams.override_from_dict(json.load(f))
