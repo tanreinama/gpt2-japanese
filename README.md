@@ -1,6 +1,8 @@
 # gpt2-japanese
 Japanese GPT2 Generation Model
 
+このプロジェクトは、学習のためのサーバー代をcamp-fireでファウンディングしました。[camp-fireの活動報告](https://camp-fire.jp/mypage/projects/320938/activities/new)
+
 # GPT2日本語モデル
 
 ***<font color='red'>New</font>***
