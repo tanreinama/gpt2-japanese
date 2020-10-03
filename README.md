@@ -4,9 +4,8 @@ Japanese GPT2 Generation Model
 # GPT2日本語モデル
 
 ***<font color='red'>New</font>***
-- [クラウドファウンディングでより大きなモデルのトレーニングのためのサーバー代の支援を求めています](https://camp-fire.jp/mypage/projects/320938/)
-- [ワード単位で学習させたv2モデル（117Mパラメーター）を公開しました](report/models.md)
-- top_k、top_pのデフォルト値を0、1にしました
+- [派生した成果物として日本語版BPEEncoderを公開しました](https://github.com/tanreinama/Japanese-BPEEncoder)
+- 日本語版BPEEncoderによる分かち書き/Encodeを行ったバージョンのトレーニングを開始しました
 
 ## GPT2に日本語コーパスを学習させたものです
 
