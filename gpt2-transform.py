@@ -2,60 +2,69 @@ import json
 import os
 import numpy as np
 import tensorflow as tf
-import requests
 import argparse
 from tqdm import tqdm
-import sentencepiece as spm
-from encoder import get_encoder
+from tensorflow.contrib.training import HParams
 import model
-from model import default_hparams
+from encode_bpe import BPEEncoder_ja
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model', type=str, default='ja-117M_v2')
+parser.add_argument('--model', type=str, default='gpt2ja-medium')
 parser.add_argument('--context', type=str, required=True)
+parser.add_argument('--gpu', type=str, default='0')
 args = parser.parse_args()
 
-sp = spm.SentencePieceProcessor()
-sp.Load(args.model+"/stm.model")
+with open('ja-bpe.txt') as f:
+    bpe = f.read().split('\n')
 
-model_params = '117M'
-if '-' in args.model:
-    model_params = args.model.split('-')[1]
-    if '_' in model_params:
-        model_params = model_params.split('_')[0]
+with open('emoji.json') as f:
+    emoji = json.loads(f.read())
 
-if not os.path.isfile(args.model+'/encoder.json'):
-    for filename in ['encoder.json', 'vocab.bpe', 'hparams.json']:
-        r = requests.get("https://storage.googleapis.com/gpt-2/models/" + model_params + "/" + filename, stream=True)
-        with open(args.model+'/'+filename, 'wb') as f:
-            file_size = int(r.headers["content-length"])
-            chunk_size = 1000
-            with tqdm(ncols=100, desc="Fetching " + filename, total=file_size, unit_scale=True) as pbar:
-                # 1k for chunk_size, since Ethernet packet size is around 1500 bytes
-                for chunk in r.iter_content(chunk_size=chunk_size):
-                    f.write(chunk)
-                    pbar.update(chunk_size)
+enc = BPEEncoder_ja(bpe, emoji)
+n_vocab = len(enc)
 
-batch_size=1
+if 'small' in args.model:
+    hparams = HParams(**{
+      "n_vocab": n_vocab,
+      "n_ctx": 1024,
+      "n_embd": 768,
+      "n_head": 12,
+      "n_layer": 12
+    })
+elif 'medium' in args.model:
+    hparams = HParams(**{
+      "n_vocab": n_vocab,
+      "n_ctx": 1024,
+      "n_embd": 1024,
+      "n_head": 16,
+      "n_layer": 24
+    })
+elif 'large' in args.model:
+    hparams = HParams(**{
+      "n_vocab": n_vocab,
+      "n_ctx": 1024,
+      "n_embd": 1280,
+      "n_head": 20,
+      "n_layer": 36
+    })
+else:
+    raise ValueError('invalid model name.')
 
-enc = get_encoder(args.model)
-hparams = default_hparams()
-with open(args.model+'/'+'hparams.json') as f:
-    hparams.override_from_dict(json.load(f))
-
-with tf.Session(graph=tf.Graph()) as sess:
-    context = tf.placeholder(tf.int32, [batch_size, None])
+config = tf.ConfigProto()
+if int(args.gpu) >= 0:
+    config.gpu_options.allow_growth = True
+    config.gpu_options.visible_device_list = args.gpu
+with tf.Session(config=config,graph=tf.Graph()) as sess:
+    context = tf.placeholder(tf.int32, [1, None])
     output = model.model(hparams=hparams, X=context[:, :-1], past=None, reuse=tf.AUTO_REUSE)
 
     saver = tf.train.Saver()
     ckpt = tf.train.latest_checkpoint(args.model)
     saver.restore(sess, ckpt)
 
-    raw_text = sp.EncodeAsPieces(args.context)
-    raw_text = ' '.join([r for r in raw_text if r!='▁'])
-    context_tokens = enc.encode(raw_text)
+    context_tokens = enc.encode(args.context)
     out = sess.run(output, feed_dict={
-        context: [context_tokens for _ in range(batch_size)]
+        context: [context_tokens]
     })
     output = out['h_flat'][-1]
-    print(output)
+    print(output.tolist())
