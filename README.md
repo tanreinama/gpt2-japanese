@@ -22,7 +22,7 @@ Japanese GPT2 Generation Model
 
 [report/corpus.md](report/corpus.md)
 
-デモンストレーション
+### デモンストレーション
 
 [Sakamoto's AI lab](http://ailab.nama.ne.jp/#gpt2ja)
 
