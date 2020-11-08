@@ -8,6 +8,7 @@ Japanese GPT2 Generation Model
 ***<font color='red'>New</font>***
 - [派生した成果物として日本語版BPEEncoderを公開しました](https://github.com/tanreinama/Japanese-BPEEncoder)
 - [正式版のモデルを公開しました](report/models.md)
+- [デモンストレーションサイトを作成しました](http://ailab.nama.ne.jp/#gpt2ja)
 
 
 
@@ -20,6 +21,10 @@ Japanese GPT2 Generation Model
 ### 学習させたコーパスについて
 
 [report/corpus.md](report/corpus.md)
+
+デモンストレーション
+
+[Sakamoto's AI lab](http://ailab.nama.ne.jp/#gpt2ja)
 
 ### TODO
 
