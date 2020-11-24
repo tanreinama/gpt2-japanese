@@ -56,7 +56,7 @@ if int(args.gpu) >= 0:
     config.gpu_options.visible_device_list = args.gpu
 with tf.Session(config=config,graph=tf.Graph()) as sess:
     context = tf.placeholder(tf.int32, [1, None])
-    output = model.model(hparams=hparams, X=context[:, :-1], past=None, reuse=tf.AUTO_REUSE)
+    output = model.model(hparams=hparams, X=context, past=None, reuse=tf.AUTO_REUSE)
 
     saver = tf.train.Saver()
     ckpt = tf.train.latest_checkpoint(args.model)
