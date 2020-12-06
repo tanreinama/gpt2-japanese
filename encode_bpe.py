@@ -109,14 +109,12 @@ if __name__=='__main__':
     enc = BPEEncoder_ja(bpe, emoji)
 
     token_chunks = []
-    raw_text = ''
-
-    num_process
     array_file = []
     def _proc(i):
+        raw_text = ''
         for j, (curDir, dirs, files) in enumerate(array_file):
             if not (j % args.num_process == i):
-                contune
+                continue
             print('append #',curDir)
             for file in tqdm(files):
                 if file.endswith(".txt"):
