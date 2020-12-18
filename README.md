@@ -1,14 +1,17 @@
 # gpt2-japanese
 Japanese GPT2 Generation Model
 
-このプロジェクトは、学習のためのサーバー代をcamp-fireでファウンディングしました。[camp-fireの活動報告](https://camp-fire.jp/projects/320938/activities#menu)。[支援者一覧](special_thanks.txt)。
+このプロジェクトは、[スポンサーを募集しています](report/sponsor.md)。[camp-fireの活動報告](https://camp-fire.jp/projects/320938/activities#menu)。[支援者一覧](special_thanks.txt)。
+
+* かねてより、camp-fireの募集期間が終了した後でも、支援出来ないかというお問い合わせを頂いていましたが、[GitHub Sponsors](https://github.com/sponsors/tanreinama)でのスポンサーを募集することにしました。リターンも、camp-fireの時と変わりません（さらに、camp-fireでは規約上不可能だったコーパスの提供も含めています）。
 
 # GPT2日本語モデル
 
 ***<font color='red'>New</font>***
-- [派生した成果物として日本語版BPEEncoderを公開しました](https://github.com/tanreinama/Japanese-BPEEncoder)
+
 - [正式版のモデルを公開しました](report/models.md)
 - [デモンストレーションサイトを作成しました](http://ailab.nama.ne.jp/#gpt2ja)
+- [GitHub Sponserによるスポンサーシップを開始しました](https://github.com/sponsors/tanreinama)
 
 
 
@@ -22,6 +25,10 @@ Japanese GPT2 Generation Model
 
 [report/corpus.md](report/corpus.md)
 
+### スポンサーシップについて
+
+[report/sponsor.md](report/sponsor.md)
+
 ### デモンストレーション
 
 [Sakamoto's AI lab](http://ailab.nama.ne.jp/#gpt2ja)
@@ -30,7 +37,7 @@ Japanese GPT2 Generation Model
 
 ✓大規模コーパスの作成（2020/8/20）<br>
 ✓日本語版BPEEncoder作成（2020/9/15）<br>
-✓mediumモデルの公開<br>□smallモデルの公開<br>
+✓mediumモデルの公開（2020/11/07）<br>□smallモデルの公開<br>
 
 ## 使い方
 
@@ -151,3 +158,4 @@ $ echo 完全の域に達することは難い。 | python3 gpt2-score.py --toke
 ```
 
 - `--tokens`を指定すると、それぞれのトークンの確率の対数が表示されます。
+
