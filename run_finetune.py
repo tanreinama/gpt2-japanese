@@ -176,7 +176,6 @@ def main():
             with open(counter_path, 'r') as fp:
                 counter = int(fp.read()) + 1
 
-        hparams_path = os.path.join(CHECKPOINT_DIR, args.run_name, 'hparams.json')
         maketree(os.path.join(CHECKPOINT_DIR, args.run_name))
 
         def save():
