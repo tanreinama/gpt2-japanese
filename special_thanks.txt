@@ -1,5 +1,5 @@
-このプロジェクトは、学習のためのサーバー代をcamp-fireでファウンディングしました。
-・支援者一覧（3千円以上・金額順）：
+このプロジェクトは、学習のためのサーバー代をcamp-fireとGitHub Sponsorsでファウンディングしました。
+・camp-fire支援者一覧（3千円以上・金額順）：
 shi3z
 npaka
 幸南工業株式会社
@@ -20,5 +20,6 @@ Yusuke Mori
 a2c
 Ryota Suzuki
 ヒロイ
-
 他3名
+・GitHub Sponsors（10$以上、新着順）
+kinmirai-xbarusui
