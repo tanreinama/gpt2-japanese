@@ -12,6 +12,7 @@ Japanese GPT2 Generation Model
 - [正式版のモデルを公開しました](report/models.md)
 - [デモンストレーションサイトを作成しました](http://ailab.nama.ne.jp/#gpt2ja)
 - [GitHub Sponserによるスポンサーシップを開始しました](https://github.com/sponsors/tanreinama)
+- [ファインチューニング用のコードを公開しました](run_finetune.py)
 
 
 
@@ -35,9 +36,8 @@ Japanese GPT2 Generation Model
 
 ### TODO
 
-✓大規模コーパスの作成（2020/8/20）<br>
-✓日本語版BPEEncoder作成（2020/9/15）<br>
-✓mediumモデルの公開（2020/11/07）<br>□smallモデルの公開<br>
+✓大規模コーパスの作成（2020/8/20）<br>✓日本語版BPEEncoder作成（2020/9/15）<br>
+✓mediumモデルの公開（2020/11/07）<br>✓smallモデルの公開（2020/12/24）<br>□largeモデルの公開（2021/3予定）<br>
 
 ## 使い方
 
@@ -158,4 +158,32 @@ $ echo 完全の域に達することは難い。 | python3 gpt2-score.py --toke
 ```
 
 - `--tokens`を指定すると、それぞれのトークンの確率の対数が表示されます。
+
+
+
+## ファインチューニング
+
+[コーパス2020](https://github.com/tanreinama/gpt2-japanese/blob/master/report/corpus.md)でプレトレーニングしたモデルは公開しています。ここでの手順は、独自のデータでモデルをさらにファインチューニングする方法です。
+
+### エンコード
+
+[Japanese-BPEEncoder](https://github.com/tanreinama/Japanese-BPEEncoder)を使用して、学習させたい独自のデータをエンコードします。
+
+```sh
+$ git clone https://github.com/tanreinama/Japanese-BPEEncoder.git
+$ cd Japanese-BPEEncoder
+$ python encode_bpe.py --src_dir <content file path> --dst_file finetune
+$ mv finetune.npz ../
+$ cd ..
+```
+
+### 学習
+
+「--base_model」に元のプレトレーニング済みモデルを「--dataset 」にエンコードしたファイルを指定して、「run_finetune.py」を起動します。
+
+```sh
+$ python run_finetune.py --base_model gpr2ja-medium --dataset finetune.npz --run_name gpr2ja-finetune_run1
+```
+
+学習したモデルは、「checkpoint」以下の「--run_name」で指定したディレクトリ内に保存されます。
 

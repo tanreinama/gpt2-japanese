@@ -36,6 +36,7 @@ mediumモデル→→→[ダウンロード](https://www.nama.ne.jp/models/gpt2j
 | モデル名      | 総パラメーター数 | レイヤー数       | URL                                                          |
 | ------------- | ---------------- | ---------------- | ------------------------------------------------------------ |
 | gpt2ja-medium | 324426752        | 16heads,24layers | https://www.nama.ne.jp/models/gpt2ja-medium.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-medium.tar.bz2 ） |
+| gpt2ja-small  | 101642496        | 12heads,12layers | https://www.nama.ne.jp/models/gpt2ja-small.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-small.tar.bz2 ） |
 
 
 
