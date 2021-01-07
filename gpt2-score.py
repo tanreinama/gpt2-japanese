@@ -1,9 +1,13 @@
 import json
 import os
 import sys
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import argparse
-from tensorflow.contrib.training import HParams
+
+if int(tf.__version__[0]) > 1:
+    from model import HParams as HParams
+else:
+    from tensorflow.contrib.training import HParams
 
 import model
 from encode_bpe import BPEEncoder_ja

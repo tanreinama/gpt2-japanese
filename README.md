@@ -57,7 +57,7 @@ $ wget https://www.nama.ne.jp/models/gpt2ja-medium.tar.bz2
 $ tar xvfj gpt2ja-medium.tar.bz2
 ```
 
-モデルを指定して実行します
+モデルを指定して実行します。Tensorflow 1.x/2.x両方で動作します
 
 ```sh
 $ python3 gpt2-generate.py --model gpt2ja-medium --num_generate 1
@@ -182,7 +182,7 @@ $ cd ..
 「--base_model」に元のプレトレーニング済みモデルを「--dataset 」にエンコードしたファイルを指定して、「run_finetune.py」を起動します。
 
 ```sh
-$ python run_finetune.py --base_model gpr2ja-medium --dataset finetune.npz --run_name gpr2ja-finetune_run1
+$ python run_finetune.py --base_model gpt2ja-medium --dataset finetune.npz --run_name gpr2ja-finetune_run1
 ```
 
 学習したモデルは、「checkpoint」以下の「--run_name」で指定したディレクトリ内に保存されます。

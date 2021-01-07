@@ -4,13 +4,17 @@ import argparse
 import json
 import os
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import time
 import tqdm
 from copy import copy
-from tensorflow.contrib.training import HParams
 from encode_bpe import BPEEncoder_ja
 import model
+
+if int(tf.__version__[0]) > 1:
+    from model import HParams as HParams
+else:
+    from tensorflow.contrib.training import HParams
 
 CHECKPOINT_DIR = 'checkpoint'
 SAMPLE_DIR = 'samples'
@@ -27,7 +31,7 @@ parser.add_argument('--optim', type=str, default='adam', help='"adam", "adagrad"
 parser.add_argument('--learning_rate', metavar='LR', type=float, default=5e-5, help='Learning rate for optimizer')
 parser.add_argument('--warmup_steps', metavar='WR', type=int, default=0, help='Learning rate warming up steps')
 
-parser.add_argument('--run_name', type=str, default='gpt2ja_finetune', help='Run id. Name of subdirectory in checkpoint/ and samples/')
+parser.add_argument('--run_name', type=str, default='gpt2ja_finetune', help='Run id. Name of subdirectory in checkpoint/')
 parser.add_argument('--save_every', metavar='N', type=int, default=1000, help='Write a checkpoint every N steps')
 
 parser.add_argument('--gpu', default='0', help='visible gpu number.')
