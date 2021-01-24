@@ -27,7 +27,11 @@ with open('emoji.json') as f:
 enc = BPEEncoder_ja(bpe, emoji)
 n_vocab = len(enc)
 
-if 'small' in args.model:
+if os.path.isfile(args.model+'/hparams.json'):
+    with open(args.model+'/hparams.json') as f:
+        params = json.loads(f.read())
+        hparams = HParams(**params)
+elif 'small' in args.model:
     hparams = HParams(**{
       "n_vocab": n_vocab,
       "n_ctx": 1024,

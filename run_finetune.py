@@ -54,7 +54,11 @@ n_vocab = len(enc)
 def main():
     args = parser.parse_args()
 
-    if 'small' in args.base_model:
+    if os.path.isfile(args.base_model+'/hparams.json'):
+        with open(args.base_model+'/hparams.json') as f:
+            params = json.loads(f.read())
+            hparams = HParams(**params)
+    elif 'small' in args.base_model:
         hparams = HParams(**{
           "n_vocab": n_vocab,
           "n_ctx": 1024,
@@ -174,6 +178,7 @@ def main():
 
         counter = 1
         counter_path = os.path.join(CHECKPOINT_DIR, args.run_name, 'counter')
+        hparams_path = os.path.join(CHECKPOINT_DIR, args.run_name, 'hparams.json')
         if os.path.exists(counter_path):
             # Load the step number if we're resuming a run
             # Add 1 so we don't immediately try to save again
@@ -194,6 +199,14 @@ def main():
                 global_step=counter)
             with open(counter_path, 'w') as fp:
                 fp.write(str(counter) + '\n')
+            with open(hparams_path, 'w') as fp:
+                fp.write(json.dumps({
+                      "n_vocab": int(hparams.n_vocab),
+                      "n_ctx": int(hparams.n_ctx),
+                      "n_embd": int(hparams.n_embd),
+                      "n_head": int(hparams.n_head),
+                      "n_layer": int(hparams.n_layer),
+                }))
 
         avg_loss = (0.0, 0.0)
         start_time = time.time()
