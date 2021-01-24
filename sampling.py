@@ -36,7 +36,7 @@ def top_p_logits(logits, p):
         )
 
 
-def sample_sequence(*, hparams, length, start_token=None, batch_size=None, context=None, temperature=1, top_k=0, top_p=0.0):
+def sample_sequence(*, hparams, length, min_length=0, start_token=None, batch_size=None, context=None, temperature=1, top_k=0, top_p=0.0):
     if start_token is None:
         assert context is not None, 'Specify exactly one of start_token and context!'
     else:
@@ -60,7 +60,21 @@ def sample_sequence(*, hparams, length, start_token=None, batch_size=None, conte
         # rather than leaving the last token transformer calculation to the while loop.
         context_output = step(hparams, context[:, :-1])
 
-        def body(past, prev, output):
+        def body1(past, prev, output):
+            next_outputs = step(hparams, prev[:, tf.newaxis], past=past)
+            logits = next_outputs['logits'][:, -1, :]  / tf.to_float(temperature)
+            if top_p > 0.0:
+                logits = top_p_logits(logits, p=top_p)
+            else:
+                logits = top_k_logits(logits, k=top_k)
+            samples = tf.multinomial(logits[:, :-1], num_samples=1, output_dtype=tf.int32)
+            return [
+                tf.concat([past, next_outputs['presents']], axis=-2),
+                tf.squeeze(samples, axis=[1]),
+                tf.concat([output, samples], axis=1),
+            ]
+
+        def body2(past, prev, output):
             next_outputs = step(hparams, prev[:, tf.newaxis], past=past)
             logits = next_outputs['logits'][:, -1, :]  / tf.to_float(temperature)
             if top_p > 0.0:
@@ -77,9 +91,26 @@ def sample_sequence(*, hparams, length, start_token=None, batch_size=None, conte
         def cond(*args):
             return True
 
+        if min_length > 0:
+            _, _, context = tf.while_loop(
+                cond=cond, body=body1,
+                maximum_iterations=min_length,
+                loop_vars=[
+                    context_output['presents'],
+                    context[:, -1],
+                    context,
+                ],
+                shape_invariants=[
+                    tf.TensorShape(model.past_shape(hparams=hparams, batch_size=batch_size)),
+                    tf.TensorShape([batch_size]),
+                    tf.TensorShape([batch_size, None]),
+                ],
+                back_prop=False,
+            )
+
         _, _, tokens = tf.while_loop(
-            cond=cond, body=body,
-            maximum_iterations=length,
+            cond=cond, body=body2,
+            maximum_iterations=length-min_length,
             loop_vars=[
                 context_output['presents'],
                 context[:, -1],

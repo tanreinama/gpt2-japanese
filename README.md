@@ -120,6 +120,16 @@ $ python3 gpt2-generate.py --context="俺の名前は坂本俊之。何処にで
 
 - ウェブ小説っぽい文章も生成出来ます。
 
+  
+
+```sh
+$ python3 gpt2-generate.py --min_length 512 --max_length 1024
+```
+
+- 「min_length」と「max_length」で生成する文章の長さを指定出来ます。「min_length」は1024までです。
+
+  
+
 ### 文章ベクトル生成
 
 ```sh

@@ -22,6 +22,7 @@ parser.add_argument('--top_p', type=float, default=0)
 parser.add_argument('--temperature', type=float, default=1)
 parser.add_argument('--gpu', type=str, default='0')
 parser.add_argument('--max_length', type=int, default=500)
+parser.add_argument('--min_length', type=int, default=0)
 args = parser.parse_args()
 
 with open('ja-bpe.txt') as f:
@@ -64,6 +65,7 @@ length=hparams.n_ctx // 2
 temperature=args.temperature
 top_k=args.top_k
 top_p=args.top_p
+min_length=max(args.min_length,0)
 
 def generate_one(sess, output):
     generated = ''
@@ -97,7 +99,7 @@ with tf.Session(config=config,graph=tf.Graph()) as sess:
     context = tf.placeholder(tf.int32, [1, None])
     output = sample_sequence(
         hparams=hparams, length=length,
-        context=context,
+        min_length=min_length, context=context,
         batch_size=1,
         temperature=temperature, top_k=top_k, top_p=top_p
     )
