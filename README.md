@@ -34,6 +34,10 @@ Japanese GPT2 Generation Model
 
 [Sakamoto's AI lab](http://ailab.nama.ne.jp/#gpt2ja)
 
+### 関連プロジェクト
+
+[text2text-japanese](https://github.com/tanreinama/text2text-japanese)
+
 ### TODO
 
 ✓大規模コーパスの作成（2020/8/20）<br>✓日本語版BPEEncoder作成（2020/9/15）<br>
