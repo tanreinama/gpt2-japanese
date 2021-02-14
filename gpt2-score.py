@@ -52,17 +52,17 @@ parser.add_argument('--exclude-end', action='store_true')
 parser.add_argument('--gpu', type=str, default='0')
 args = parser.parse_args()
 
-with open('ja-bpe.txt') as f:
+with open('ja-bpe.txt', encoding='utf-8') as f:
     bpe = f.read().split('\n')
 
-with open('emoji.json') as f:
+with open('emoji.json', encoding='utf-8') as f:
     emoji = json.loads(f.read())
 
 enc = BPEEncoder_ja(bpe, emoji)
 n_vocab = len(enc)
 
 if os.path.isfile(args.model+'/hparams.json'):
-    with open(args.model+'/hparams.json') as f:
+    with open(args.model+'/hparams.json', encoding='utf-8') as f:
         params = json.loads(f.read())
         hparams = HParams(**params)
 elif 'small' in args.model:

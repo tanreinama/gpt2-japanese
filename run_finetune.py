@@ -42,10 +42,10 @@ def maketree(path):
     except:
         pass
 
-with open('ja-bpe.txt') as f:
+with open('ja-bpe.txt', encoding='utf-8') as f:
     bpe = f.read().split('\n')
 
-with open('emoji.json') as f:
+with open('emoji.json', encoding='utf-8') as f:
     emoji = json.loads(f.read())
 
 enc = BPEEncoder_ja(bpe, emoji)
@@ -55,7 +55,7 @@ def main():
     args = parser.parse_args()
 
     if os.path.isfile(args.base_model+'/hparams.json'):
-        with open(args.base_model+'/hparams.json') as f:
+        with open(args.base_model+'/hparams.json', encoding='utf-8') as f:
             params = json.loads(f.read())
             hparams = HParams(**params)
     elif 'small' in args.base_model:
@@ -182,7 +182,7 @@ def main():
         if os.path.exists(counter_path):
             # Load the step number if we're resuming a run
             # Add 1 so we don't immediately try to save again
-            with open(counter_path, 'r') as fp:
+            with open(counter_path, 'r', encoding='utf-8') as fp:
                 counter = int(fp.read()) + 1
 
         maketree(os.path.join(CHECKPOINT_DIR, args.run_name))
@@ -197,9 +197,9 @@ def main():
                 sess,
                 os.path.join(CHECKPOINT_DIR, args.run_name, 'model'),
                 global_step=counter)
-            with open(counter_path, 'w') as fp:
+            with open(counter_path, 'w', encoding='utf-8') as fp:
                 fp.write(str(counter) + '\n')
-            with open(hparams_path, 'w') as fp:
+            with open(hparams_path, 'w', encoding='utf-8') as fp:
                 fp.write(json.dumps({
                       "n_vocab": int(hparams.n_vocab),
                       "n_ctx": int(hparams.n_ctx),

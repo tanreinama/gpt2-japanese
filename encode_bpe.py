@@ -102,9 +102,9 @@ if __name__=='__main__':
     parser.add_argument("--combine", help="Concatenate files with <|endoftext|> separator into chunks of this minimum size", type=int, default=50000 )
     args = parser.parse_args()
 
-    with open('ja-bpe.txt') as f:
+    with open('ja-bpe.txt', encoding='utf-8') as f:
         bpe = f.read().split('\n')
-    with open('emoji.json') as f:
+    with open('emoji.json', encoding='utf-8') as f:
         emoji = json.loads(f.read())
     enc = BPEEncoder_ja(bpe, emoji)
 
@@ -119,7 +119,7 @@ if __name__=='__main__':
             for file in tqdm(files):
                 if file.endswith(".txt"):
                     input = os.path.join(curDir, file)
-                    with open(input, 'r') as fp:
+                    with open(input, 'r', encoding='utf-8') as fp:
                         raw_text += fp.read()
                     raw_text += '<|endoftext|>'
                     if len(raw_text) >= args.combine:
@@ -129,7 +129,7 @@ if __name__=='__main__':
             if raw_text and len(raw_text) > 0:
                 tokens = np.stack(enc.encode(raw_text))
                 token_chunks.append(tokens)
-        with open('tmp%d.pkl'%i, 'wb') as f:
+        with open('tmp%d.pkl'%i, 'wb', encoding='utf-8') as f:
             pickle.dump(token_chunks, f)
 
     for curDir, dirs, files in os.walk(args.src_dir):
@@ -140,7 +140,7 @@ if __name__=='__main__':
 
     token_chunks = []
     for i in range(args.num_process):
-        with open('tmp%d.pkl'%i, 'rb') as f:
+        with open('tmp%d.pkl'%i, 'rb', encoding='utf-8') as f:
             token_chunks.extend(pickle.load(f))
 
     np.savez_compressed(args.dst_file, *token_chunks)

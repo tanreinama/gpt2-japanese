@@ -25,17 +25,17 @@ parser.add_argument('--max_length', type=int, default=500)
 parser.add_argument('--min_length', type=int, default=0)
 args = parser.parse_args()
 
-with open('ja-bpe.txt') as f:
+with open('ja-bpe.txt', encoding='utf-8') as f:
     bpe = f.read().split('\n')
 
-with open('emoji.json') as f:
+with open('emoji.json', encoding='utf-8') as f:
     emoji = json.loads(f.read())
 
 enc = BPEEncoder_ja(bpe, emoji)
 n_vocab = len(enc)
 
 if os.path.isfile(args.model+'/hparams.json'):
-    with open(args.model+'/hparams.json') as f:
+    with open(args.model+'/hparams.json', encoding='utf-8') as f:
         params = json.loads(f.read())
         hparams = HParams(**params)
 elif 'small' in args.model:
@@ -113,7 +113,7 @@ with tf.Session(config=config,graph=tf.Graph()) as sess:
     saver.restore(sess, ckpt)
 
     if len(args.output_file) > 0:
-        with open(args.output_file, 'w') as of:
+        with open(args.output_file, 'w', encoding='utf-8') as of:
             for i in range(args.num_generate):
                 of.write(generate_one(sess, output)+'\n')
                 if i < args.num_generate-1:
