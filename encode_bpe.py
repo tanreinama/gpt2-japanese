@@ -129,7 +129,7 @@ if __name__=='__main__':
             if raw_text and len(raw_text) > 0:
                 tokens = np.stack(enc.encode(raw_text))
                 token_chunks.append(tokens)
-        with open('tmp%d.pkl'%i, 'wb', encoding='utf-8') as f:
+        with open('tmp%d.pkl'%i, 'wb') as f:
             pickle.dump(token_chunks, f)
 
     for curDir, dirs, files in os.walk(args.src_dir):
@@ -140,7 +140,7 @@ if __name__=='__main__':
 
     token_chunks = []
     for i in range(args.num_process):
-        with open('tmp%d.pkl'%i, 'rb', encoding='utf-8') as f:
+        with open('tmp%d.pkl'%i, 'rb') as f:
             token_chunks.extend(pickle.load(f))
 
     np.savez_compressed(args.dst_file, *token_chunks)
