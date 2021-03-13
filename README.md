@@ -9,12 +9,12 @@ Japanese GPT2 Generation Model
 
 ***<font color='red'>New</font>***
 
-- [正式版のモデルを公開しました](report/models.md)
 - [デモンストレーションサイトを作成しました](http://ailab.nama.ne.jp/#gpt2ja)
 - [GitHub Sponserによるスポンサーシップを開始しました](https://github.com/sponsors/tanreinama)
 - [ファインチューニング用のコードを公開しました](run_finetune.py)
+- [Largeモデルを公開しました](report/models.md)
 
-
+  
 
 ## GPT2に日本語コーパスを学習させたものです
 
@@ -41,7 +41,7 @@ Japanese GPT2 Generation Model
 ### TODO
 
 ✓大規模コーパスの作成（2020/8/20）<br>✓日本語版BPEEncoder作成（2020/9/15）<br>
-✓mediumモデルの公開（2020/11/07）<br>✓smallモデルの公開（2020/12/24）<br>□largeモデルの公開（2021/3予定）<br>
+✓mediumモデルの公開（2020/11/07）<br>✓smallモデルの公開（2020/12/24）<br>✓largeモデルの公開（2021/3/13）<br>
 
 ## 使い方
 
