@@ -45,9 +45,9 @@ smallモデルとmediumモデルはadamアルゴリズムで、largeモデルの
 
 | モデル名      | 総パラメーター数 | 学習Optimizer | レイヤー数       | URL                                                          |
 | ------------- | ---------------- | ------------- | ---------------- | ------------------------------------------------------------ |
-| gpt2ja-large  | 736034560        | adam          | 20heads,36layers | https://www.nama.ne.jp/models/gpt2ja-large.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-large.tar.bz2 ） |
+| gpt2ja-large  | 736034560        | adagrad       | 20heads,36layers | https://www.nama.ne.jp/models/gpt2ja-large.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-large.tar.bz2 ） |
 | gpt2ja-medium | 324426752        | adam          | 16heads,24layers | https://www.nama.ne.jp/models/gpt2ja-medium.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-medium.tar.bz2 ） |
-| gpt2ja-small  | 101642496        | adagrad       | 12heads,12layers | https://www.nama.ne.jp/models/gpt2ja-small.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-small.tar.bz2 ） |
+| gpt2ja-small  | 101642496        | adam          | 12heads,12layers | https://www.nama.ne.jp/models/gpt2ja-small.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-small.tar.bz2 ） |
 
 
 
