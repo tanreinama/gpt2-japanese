@@ -9,15 +9,25 @@ Japanese GPT2 Generation Pretrained Model
 
 
 
+smallモデル→→→[ダウンロード](https://www.nama.ne.jp/models/gpt2ja-small.tar.bz2) （[予備URL](http://ailab.nama.ne.jp/models/gpt2ja-small.tar.bz2)）←←←
+
 mediumモデル→→→[ダウンロード](https://www.nama.ne.jp/models/gpt2ja-medium.tar.bz2) （[予備URL](http://ailab.nama.ne.jp/models/gpt2ja-medium.tar.bz2)）←←←
 
-### 以前のモデルとの違いについて
+largeモデル→→→[ダウンロード](https://www.nama.ne.jp/models/gpt2ja-large.tar.bz2) （[予備URL](http://ailab.nama.ne.jp/models/gpt2ja-large.tar.bz2)）←←←
 
-[日本語版BPEEncoder](https://github.com/tanreinama/Japanese-BPEEncoder)でエンコードされたデータで学習したモデルをもって、正式のモデルとします。
 
-以前のモデルはexperimentalなモデルという扱いになります。
 
-語彙数が変わった結果、出力層のlogitsのパラメーター数が変わり、総パラメーター数も変化したので、モデルの名称も、以前のような（117M/345M/774M）という名前ではなく、（small/medium/large）という名前になります。
+### モデル毎の違いについて
+
+すべてのモデルは、[Japanese-BPEEncoder](https://github.com/tanreinama/Japanese-BPEEncoder)でエンコードされるトークンを使用します。また、入力トークン数は1024で固定です。
+
+GPT-2では、出力の際に、トークンを一つ一つ予測しながら、出力数の分だけループでtransformerを実行します。そのため、GPT-2の文章生成タスクは、学習よりも実行時間がかかります。実行速度が遅い場合は、最大出力文字数を少なくすると、ループの回る回数が減るので、その分早く実行されます。
+
+smallモデルとmediumモデルはadamアルゴリズムで、largeモデルのみ、GPUメモリの都合からadagradアルゴリズムで（LRを手動調整しながら）学習されました。そのため、largeモデルは、実行時間が増えた割に本来の（20head36layerの）性能に到達していない可能性があります。
+
+ファインチューニングのベースとして利用するのでは無く、そのまま素の文章生成モデルとして使用する場合は、引き続きmediumモデルの使用を推奨します。
+
+
 
 ### コーパスと学習回数について
 
@@ -25,7 +35,7 @@ mediumモデル→→→[ダウンロード](https://www.nama.ne.jp/models/gpt2j
 
 このコーパスをエンコードすると、約5.3Gトークンとなります。学習回数は、10Mイテレーションを超える程度を目安にしました。
 
-1バッチで取り出すトークンは1024個なので、backward iterationsは約2エポック分に相当します（ランダムに取りだしているのでエポックではない）。
+1バッチで取り出すトークンは1024個なので、backward iterationsは約2エポック分に相当します。
 
 
 
@@ -33,14 +43,13 @@ mediumモデル→→→[ダウンロード](https://www.nama.ne.jp/models/gpt2j
 
 
 
-| モデル名      | 総パラメーター数 | レイヤー数       | URL                                                          |
-| ------------- | ---------------- | ---------------- | ------------------------------------------------------------ |
-| gpt2ja-medium | 324426752        | 16heads,24layers | https://www.nama.ne.jp/models/gpt2ja-medium.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-medium.tar.bz2 ） |
-| gpt2ja-small  | 101642496        | 12heads,12layers | https://www.nama.ne.jp/models/gpt2ja-small.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-small.tar.bz2 ） |
+| モデル名      | 総パラメーター数 | 学習Optimizer | レイヤー数       | URL                                                          |
+| ------------- | ---------------- | ------------- | ---------------- | ------------------------------------------------------------ |
+| gpt2ja-large  | 736034560        | adam          | 20heads,36layers | https://www.nama.ne.jp/models/gpt2ja-large.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-large.tar.bz2 ） |
+| gpt2ja-medium | 324426752        | adam          | 16heads,24layers | https://www.nama.ne.jp/models/gpt2ja-medium.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-medium.tar.bz2 ） |
+| gpt2ja-small  | 101642496        | adagrad       | 12heads,12layers | https://www.nama.ne.jp/models/gpt2ja-small.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-small.tar.bz2 ） |
 
 
-
-以前のモデル（experimentalモデル）は、性能がイマイチなので基本的に使いません。
 
 
 
@@ -53,3 +62,5 @@ mediumモデル→→→[ダウンロード](https://www.nama.ne.jp/models/gpt2j
 現在、gpt2-generate.pyのデフォルトは、top_k=40、top_p=0となっています。
 
 top_kとtop_pの値は排他で、片方を>0に設定したら片方を0にしなければなりません。
+
+日本語BPEEncoderでの語彙数は、オリジナルのものに比べて半分少々なので、top_k=20程度の値にした方が良いのかもしれません（未検証）。
