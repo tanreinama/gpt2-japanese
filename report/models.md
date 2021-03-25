@@ -13,7 +13,7 @@ smallモデル→→→[ダウンロード](https://www.nama.ne.jp/models/gpt2ja
 
 mediumモデル→→→[ダウンロード](https://www.nama.ne.jp/models/gpt2ja-medium.tar.bz2) （[予備URL](http://ailab.nama.ne.jp/models/gpt2ja-medium.tar.bz2)）←←←
 
-largeモデル→→→[ダウンロード](https://www.nama.ne.jp/models/gpt2ja-large.tar.bz2) （[予備URL](http://ailab.nama.ne.jp/models/gpt2ja-large.tar.bz2)）←←←
+largeモデル→→→公開一時停止中←←←
 
 
 
@@ -22,8 +22,6 @@ largeモデル→→→[ダウンロード](https://www.nama.ne.jp/models/gpt2ja
 すべてのモデルは、[Japanese-BPEEncoder](https://github.com/tanreinama/Japanese-BPEEncoder)でエンコードされるトークンを使用します。また、入力トークン数は1024で固定です。
 
 GPT-2では、出力の際に、トークンを一つ一つ予測しながら、出力数の分だけループでtransformerを実行します。そのため、GPT-2の文章生成タスクは、学習よりも実行時間がかかります。実行速度が遅い場合は、最大出力文字数を少なくすると、ループの回る回数が減るので、その分早く実行されます。
-
-smallモデルとmediumモデルはadamアルゴリズムで、largeモデルのみ、GPUメモリの都合からadagradアルゴリズムで（LRを手動調整しながら）学習されました。そのため、largeモデルは、実行時間が増えた割に本来の（20head36layerの）性能に到達していない可能性があります。
 
 ファインチューニングのベースとして利用するのでは無く、そのまま素の文章生成モデルとして使用する場合は、引き続きmediumモデルの使用を推奨します。
 
@@ -41,13 +39,12 @@ smallモデルとmediumモデルはadamアルゴリズムで、largeモデルの
 
 ## 公開している学習済みモデル
 
+Largeモデルは、評価の結果、性能が十分に目標達成していないと分かったので、一旦公開停止します。Experimentalなモデルという扱いで、ファインチューニングのベースにしたい、等といった場合は、メールいただければ個別にURLお送りします。
 
-
-| モデル名      | 総パラメーター数 | 学習Optimizer | レイヤー数       | URL                                                          |
-| ------------- | ---------------- | ------------- | ---------------- | ------------------------------------------------------------ |
-| gpt2ja-large  | 736034560        | adagrad       | 20heads,36layers | https://www.nama.ne.jp/models/gpt2ja-large.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-large.tar.bz2 ） |
-| gpt2ja-medium | 324426752        | adam          | 16heads,24layers | https://www.nama.ne.jp/models/gpt2ja-medium.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-medium.tar.bz2 ） |
-| gpt2ja-small  | 101642496        | adam          | 12heads,12layers | https://www.nama.ne.jp/models/gpt2ja-small.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-small.tar.bz2 ） |
+| モデル名      | 総パラメーター数 | レイヤー数       | URL                                                          |
+| ------------- | ---------------- | ---------------- | ------------------------------------------------------------ |
+| gpt2ja-medium | 324426752        | 16heads,24layers | https://www.nama.ne.jp/models/gpt2ja-medium.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-medium.tar.bz2 ） |
+| gpt2ja-small  | 101642496        | 12heads,12layers | https://www.nama.ne.jp/models/gpt2ja-small.tar.bz2<br />（予備：http://ailab.nama.ne.jp/models/gpt2ja-small.tar.bz2 ） |
 
 
 
