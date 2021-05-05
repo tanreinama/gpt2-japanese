@@ -152,7 +152,7 @@ def main():
                 current_token = []
                 for ind in range(0,len(token_chunk)):
                     current_token.append(np.uint16(token_chunk[ind]))
-                    if len(current_token) == hparams.n_ctx or current_token[-1] == n_vocab-1:
+                    if len(current_token) == hparams.n_ctx:
                         global_chunks.append(current_token)
                         current_token = []
                 if len(current_token) > 1:
