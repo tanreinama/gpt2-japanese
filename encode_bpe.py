@@ -109,9 +109,9 @@ if __name__=='__main__':
         emoji = json.loads(f.read())
     enc = BPEEncoder_ja(bpe, emoji)
 
-    token_chunks = []
     array_file = []
     def _proc(i):
+        token_chunks = []
         raw_text = ''
         for j, (curDir, dirs, files) in enumerate(array_file):
             if not (j % args.num_process == i):
