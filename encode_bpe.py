@@ -100,6 +100,7 @@ if __name__=='__main__':
     parser.add_argument("--dst_file", help="destnation file", required=True )
     parser.add_argument("--num_process", help="process num", type=int, default=8 )
     parser.add_argument("--combine", help="Concatenate files with <|endoftext|> separator into chunks of this minimum size", type=int, default=50000 )
+    parser.add_argument('--clean_text', action='store_true')
     args = parser.parse_args()
 
     with open('ja-bpe.txt', encoding='utf-8') as f:
@@ -123,7 +124,7 @@ if __name__=='__main__':
                         raw_text += fp.read()
                     raw_text += '<|endoftext|>'
                     if len(raw_text) >= args.combine:
-                        tokens = np.stack(enc.encode(raw_text))
+                        tokens = np.stack(enc.encode(raw_text, clean=args.clean_text))
                         token_chunks.append(tokens)
                         raw_text = ''
             if raw_text and len(raw_text) > 0:
