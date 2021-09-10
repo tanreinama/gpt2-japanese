@@ -147,17 +147,17 @@ def main():
         print('Loading dataset...')
         global_chunks = []
         with np.load(args.dataset) as npz:
+            current_token = []
             for inditem, item in enumerate(npz.files):
                 token_chunk = npz[item]
-                current_token = []
                 for ind in range(0,len(token_chunk)):
                     current_token.append(np.uint16(token_chunk[ind]))
                     if len(current_token) == hparams.n_ctx:
                         global_chunks.append(current_token)
                         current_token = []
-                if len(current_token) > 1:
-                    global_chunks.append(current_token)
-                    current_token = []
+            if len(current_token) > 1:
+                global_chunks.append(current_token + [n_vocab-1]*(hparams.n_ctx-len(current_token)))
+                current_token = []
         global_chunk_index = np.random.permutation(len(global_chunks))
         global_chunk_step = 0
         print('Training...')
