@@ -5,6 +5,7 @@ import re
 class BPEEncoder_ja:
     def __init__(self, bpe, emoji):
         self.bpe = bpe
+        self.bpe_idx = {k:v for v,k in enumerate(bpe)}
         self.emoji = emoji
         self.maxlen = np.max([len(w) for w in self.bpe])
         self.content_repatter1 = re.compile(r"(https?|ftp)(:\/\/[-_\.!~*\'()a-zA-Z0-9;\/?:\@&=\+$,%#]+)")
@@ -48,8 +49,8 @@ class BPEEncoder_ja:
             end = min(len(text), pos+self.maxlen+1) if text[pos]=='<' else pos+2
             for e in range(end, pos, -1):
                 wd = text[pos:e]
-                if wd in self.bpe:
-                    result.append(self.bpe.index(wd))
+                if wd in self.bpe_idx:
+                    result.append(self.bpe_idx[wd])
                     pos = e
                     bp = True
                     break
@@ -57,7 +58,7 @@ class BPEEncoder_ja:
                 end = pos+1
                 wd = text[pos:end]
                 for i in wd.encode('utf-8'):
-                    result.append(self.bpe.index('<|byte%d|>'%i))
+                    result.append(self.bpe_idx['<|byte%d|>'%i])
                 pos = end
         return result
 
