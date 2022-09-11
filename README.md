@@ -1,9 +1,9 @@
 # gpt2-japanese
 Japanese GPT2 Generation Model
 
-このプロジェクトは、[スポンサーを募集しています](report/sponsor.md)。[camp-fireの活動報告](https://camp-fire.jp/projects/320938/activities#menu)。[支援者一覧](special_thanks.txt)。
+## 後継プロジェクト → [GPTSAN](https://github.com/tanreinama/GPTSAN)
 
-* かねてより、camp-fireの募集期間が終了した後でも、支援出来ないかというお問い合わせを頂いていましたが、[GitHub Sponsors](https://github.com/sponsors/tanreinama)でのスポンサーを募集することにしました。リターンも、camp-fireの時と変わりません（さらに、camp-fireでは規約上不可能だったコーパスの提供も含めています）。
+### 新規案件では[GPTSAN](https://github.com/tanreinama/GPTSAN)を使うことを推奨します。
 
 # GPT2日本語モデル
 
@@ -14,7 +14,7 @@ Japanese GPT2 Generation Model
 - [ファインチューニング用のコードを公開しました](run_finetune.py)
 - [Largeモデルを公開しました](report/models.md)
 
-  
+
 
 ## GPT2に日本語コーパスを学習させたものです
 
@@ -124,7 +124,7 @@ $ python3 gpt2-generate.py --context="俺の名前は坂本俊之。何処にで
 
 - ウェブ小説っぽい文章も生成出来ます。
 
-  
+
 
 ```sh
 $ python3 gpt2-generate.py --min_length 512 --max_length 1024
@@ -132,7 +132,7 @@ $ python3 gpt2-generate.py --min_length 512 --max_length 1024
 
 - 「min_length」と「max_length」で生成する文章の長さを指定出来ます。「min_length」は1024までです。
 
-  
+
 
 ### 文章ベクトル生成
 
@@ -200,4 +200,3 @@ $ python run_finetune.py --base_model gpt2ja-medium --dataset finetune.npz --run
 ```
 
 学習したモデルは、「checkpoint」以下の「--run_name」で指定したディレクトリ内に保存されます。
-
